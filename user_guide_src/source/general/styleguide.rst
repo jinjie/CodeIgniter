@@ -3,8 +3,10 @@ PHP Style Guide
 ###############
 
 
-The following page describes the use of coding rules adhered to when
-developing CodeIgniter.
+The following page describes the coding styles adhered to when
+contributing to the development of CodeIgniter. There is no requirement
+to use these styles in your own CodeIgniter application, though they
+are recommended.
 
 .. contents:: Table of Contents
 
@@ -50,36 +52,43 @@ The PHP closing tag on a PHP document **?>** is optional to the PHP
 parser. However, if used, any whitespace following the closing tag,
 whether introduced by the developer, user, or an FTP application, can
 cause unwanted output, PHP errors, or if the latter are suppressed,
-blank pages. For this reason, all PHP files should **OMIT** the closing
-PHP tag, and instead use a comment block to mark the end of file and
-its location relative to the application root. This allows you to still
-identify a file as being complete and not truncated.
+blank pages. For this reason, all PHP files MUST OMIT the PHP closing
+tag and end with a single empty line instead.
+
+File Naming
+===========
+
+Class files must be named in a Ucfirst-like manner, while any other file name
+(configurations, views, generic scripts, etc.) should be in all lowercase.
 
 **INCORRECT**::
 
-	<?php
+	somelibrary.php
+	someLibrary.php
+	SOMELIBRARY.php
+	Some_Library.php
 
-	echo "Here's my code!";
-
-	?>
+	Application_config.php
+	Application_Config.php
+	applicationConfig.php
 
 **CORRECT**::
 
-	<?php
+	Somelibrary.php
+	Some_library.php
 
-	echo "Here's my code!";
+	applicationconfig.php
+	application_config.php
 
-	/* End of file myfile.php */
-	/* Location: ./system/modules/mymodule/myfile.php */
+Furthermore, class file names should match the name of the class itself.
+For example, if you have a class named `Myclass`, then its filename must
+be **Myclass.php**.
 
 Class and Method Naming
 =======================
 
 Class names should always start with an uppercase letter. Multiple words
-should be separated with an underscore, and not CamelCased. All other
-class methods should be entirely lowercased and named to clearly
-indicate their function, preferably including a verb. Try to avoid
-overly long and verbose names.
+should be separated with an underscore, and not CamelCased.
 
 **INCORRECT**::
 
@@ -100,7 +109,10 @@ overly long and verbose names.
 		}
 	}
 
-Examples of improper and proper method naming:
+Class methods should be entirely lowercased and named to clearly
+indicate their function, preferably including a verb. Try to avoid
+overly long and verbose names. Multiple words should be separated
+with an underscore.
 
 **INCORRECT**::
 
@@ -117,8 +129,8 @@ Examples of improper and proper method naming:
 Variable Names
 ==============
 
-The guidelines for variable naming is very similar to that used for
-class methods. Namely, variables should contain only lowercase letters,
+The guidelines for variable naming are very similar to those used for
+class methods. Variables should contain only lowercase letters,
 use underscore separators, and be reasonably named to indicate their
 purpose and contents. Very short, non-word variables should only be used
 as iterators in for() loops.
@@ -242,10 +254,10 @@ uppercase.
 Logical Operators
 =================
 
-Use of **\|\|** is discouraged as its clarity on some output devices is
-low (looking like the number 11 for instance). **&&** is preferred over
-**AND** but either are acceptable, and a space should always precede and
-follow **!**.
+Use of the ``||`` "or" comparison operator is discouraged, as its clarity
+on some output devices is low (looking like the number 11, for instance).
+``&&`` is preferred over ``AND`` but either are acceptable, and a space should
+always precede and follow ``!``.
 
 **INCORRECT**::
 
@@ -318,14 +330,9 @@ other numbers) become strings of digits, and boolean TRUE becomes "1"::
 Debugging Code
 ==============
 
-No debugging code can be left in place for submitted add-ons unless it
-is commented out, i.e. no var_dump(), print_r(), die(), and exit()
-calls that were used while creating the add-on, unless they are
-commented out.
-
-::
-
-	// print_r($foo);
+Do not leave debugging code in your submissions, even when commented out.
+Things such as ``var_dump()``, ``print_r()``, ``die()``/``exit()`` should not be included
+in your code unless it serves a specific purpose other than debugging.
 
 Whitespace in Files
 ===================
@@ -333,73 +340,26 @@ Whitespace in Files
 No whitespace can precede the opening PHP tag or follow the closing PHP
 tag. Output is buffered, so whitespace in your files can cause output to
 begin before CodeIgniter outputs its content, leading to errors and an
-inability for CodeIgniter to send proper headers. In the examples below,
-select the text with your mouse to reveal the incorrect whitespace.
+inability for CodeIgniter to send proper headers.
 
 Compatibility
 =============
 
-Unless specifically mentioned in your add-on's documentation, all code
-must be compatible with PHP version 5.1+. Additionally, do not use PHP
-functions that require non-default libraries to be installed unless your
-code contains an alternative method when the function is not available,
-or you implicitly document that your add-on requires said PHP libraries.
+CodeIgniter recommends PHP 5.6 or newer to be used, but it should be
+compatible with PHP 5.4.8. Your code must either be compatible with this
+requirement, provide a suitable fallback, or be an optional feature that
+dies quietly without affecting a user's application.
 
-Class and File Names using Common Words
-=======================================
-
-When your class or filename is a common word, or might quite likely be
-identically named in another PHP script, provide a unique prefix to help
-prevent collision. Always realize that your end users may be running
-other add-ons or third party PHP scripts. Choose a prefix that is unique
-to your identity as a developer or company.
-
-**INCORRECT**::
-
-	class Email		pi.email.php
-	class Xml		ext.xml.php
-	class Import	mod.import.php
-
-**CORRECT**::
-
-	class Pre_email		pi.pre_email.php
-	class Pre_xml		ext.pre_xml.php
-	class Pre_import	mod.pre_import.php
-
-Database Table Names
-====================
-
-Any tables that your add-on might use must use the 'exp\_' prefix,
-followed by a prefix uniquely identifying you as the developer or
-company, and then a short descriptive table name. You do not need to be
-concerned about the database prefix being used on the user's
-installation, as CodeIgniter's database class will automatically convert
-'exp\_' to what is actually being used.
-
-**INCORRECT**::
-
-	email_addresses		// missing both prefixes
-	pre_email_addresses	// missing exp_ prefix
-	exp_email_addresses	// missing unique prefix
-
-**CORRECT**::
-
-	exp_pre_email_addresses
-
-.. note:: Be mindful that MySQL has a limit of 64 characters for table
-	names. This should not be an issue as table names that would exceed this
-	would likely have unreasonable names. For instance, the following table
-	name exceeds this limitation by one character. Silly, no?
-	**exp_pre_email_addresses_of_registered_users_in_seattle_washington**
+Additionally, do not use PHP functions that require non-default libraries
+to be installed unless your code contains an alternative method when the
+function is not available.
 
 One File per Class
 ==================
 
-Use separate files for each class your add-on uses, unless the classes
-are *closely related*. An example of CodeIgniter files that contains
-multiple classes is the Database class file, which contains both the DB
-class and the DB_Cache class, and the Magpie plugin, which contains
-both the Magpie and Snoopy classes.
+Use separate files for each class, unless the classes are *closely related*.
+An example of a CodeIgniter file that contains multiple classes is the 
+Xmlrpc library file.
 
 Whitespace
 ==========
@@ -536,8 +496,8 @@ functions and increase readability.
 Localized Text
 ==============
 
-Any text that is output in the control panel should use language
-variables in your lang file to allow localization.
+CodeIgniter libraries should take advantage of corresponding language files
+whenever possible.
 
 **INCORRECT**::
 
@@ -550,7 +510,7 @@ variables in your lang file to allow localization.
 Private Methods and Variables
 =============================
 
-Methods and variables that are only accessed internally by your class,
+Methods and variables that are only accessed internally,
 such as utility and helper functions that your public methods use for
 code abstraction, should be prefixed with an underscore.
 
@@ -567,7 +527,7 @@ hidden to meet this requirement. For instance, never access a variable
 that you did not set yourself (such as ``$_POST`` array keys) without first
 checking to see that it ``isset()``.
 
-Make sure that while developing your add-on, error reporting is enabled
+Make sure that your dev environment has error reporting enabled
 for ALL users, and that display_errors is enabled in the PHP
 environment. You can check this setting with::
 
@@ -582,7 +542,7 @@ the ability to change this in the php.ini, you can often enable it with::
 	ini_set('display_errors', 1);
 
 .. note:: Setting the `display_errors
-	<http://php.net/manual/en/ref.errorfunc.php#ini.display-errors>`_
+	<http://php.net/manual/en/errorfunc.configuration.php#ini.display-errors>`_
 	setting with ``ini_set()`` at runtime is not identical to having
 	it enabled in the PHP environment. Namely, it will not have any
 	effect if the script has fatal errors.

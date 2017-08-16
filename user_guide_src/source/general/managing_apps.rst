@@ -21,7 +21,7 @@ Relocating your Application Directory
 =====================================
 
 It is possible to move your application directory to a different
-location on your server than your system directory. To do so open
+location on your server than your web root. To do so open
 your main index.php and set a *full server path* in the
 ``$application_folder`` variable::
 
@@ -40,14 +40,12 @@ and "bar". You could structure your application directories like this::
 	applications/foo/
 	applications/foo/config/
 	applications/foo/controllers/
-	applications/foo/errors/
 	applications/foo/libraries/
 	applications/foo/models/
 	applications/foo/views/
 	applications/bar/
 	applications/bar/config/
 	applications/bar/controllers/
-	applications/bar/errors/
 	applications/bar/libraries/
 	applications/bar/models/
 	applications/bar/views/
